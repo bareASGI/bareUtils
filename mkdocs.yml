@@ -1,8 +1,8 @@
 site_name: bareUtils
 site_description: Utilities for the bareASGI and bareClient projects
 
-repo_name: rob-blackbourn/bareUtils
-repo_url: https://github.com/rob-blackbourn/bareUtils
+repo_name: bareASGI/bareUtils
+repo_url: https://github.com/bareASGI/bareUtils
 edit_uri: ""
 
 theme:

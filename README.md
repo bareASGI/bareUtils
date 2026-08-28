@@ -1,8 +1,8 @@
 # bareutils
 
-Utilities for [bareASGI](https://github.com/rob-blackbourn/bareASGI)
-and [bareClient](https://github.com/rob-blackbourn/bareClient)
-(read the [docs](https://rob-blackbourn.github.io/bareUtils/)).
+Utilities for [bareASGI](https://github.com/bareASGI/bareASGI)
+and [bareClient](https://github.com/bareASGI/bareClient)
+(read the [docs](https://bareASGI.github.io/bareUtils/)).
 
 ## Installation
 

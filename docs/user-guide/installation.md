@@ -1,14 +1,14 @@
 # Installation
 
 Typically this package will be a dependency of
-[bareASGI](https://github.com/rob-blackbourn/bareASGI)
-or [bareClient](https://github.com/rob-blackbourn/bareClient)
-(read the [docs](https://rob-blackbourn.github.io/bareUtils/)).
+[bareASGI](https://github.com/bareASGI/bareASGI)
+or [bareClient](https://github.com/bareASGI/bareClient)
+(read the [docs](https://bareASGI.github.io/bareUtils/)).
 
 You can install it separately with pip.
 
 ```bash
-pip install bareutils
+pip install bareUtils
 ```
 
 This is a Python 3.11 and later package.

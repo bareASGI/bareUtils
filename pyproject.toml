@@ -48,9 +48,9 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://rob-blackbourn.github.io/bareUtils"
-Repository = "https://github.com/rob-blackbourn/bareUtils"
-Issues = "https://github.com/rob-blackbourn/bareUtils/issues"
+Homepage = "https://bareASGI.github.io/bareUtils"
+Repository = "https://github.com/bareASGI/bareUtils"
+Issues = "https://github.com/bareASGI/bareUtils/issues"
 
 [build-system]
 requires = ["setuptools>=61.0"]
