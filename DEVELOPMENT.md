@@ -1,6 +1,6 @@
 # Development
 
-The project uses standard tooling with Python >= 3.11.
+The project uses standard tooling with Python >= 3.12.
 
 To develop, create a virtual environment and install the project.
 
