@@ -42,6 +42,14 @@ You can also check the coverage.
 
 ## Creating the documentation
 
+Build and deploy to gh-pages
+
 ```bash
-mkdocs build
+mike deploy --push --update-aliases 5.0 latest
+```
+
+Set the default version.
+
+```bash
+mike set-default --push latest
 ```
