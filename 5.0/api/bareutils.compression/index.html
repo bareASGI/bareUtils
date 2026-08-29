@@ -1,0 +1,3477 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Utilities for the bareASGI and bareClient projects">
+      
+      
+      
+      
+        <link rel="prev" href="../bareutils.unpacking/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>bareutils.compression - bareUtils</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-bareutilscompression" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="bareUtils" class="md-header__button md-logo" aria-label="bareUtils" data-md-component="logo">
+      
+  <img src="../../images/peach.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            bareUtils
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              bareutils.compression
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/bareASGI/bareUtils" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bareASGI/bareUtils
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="bareUtils" class="md-nav__button md-logo" aria-label="bareUtils" data-md-component="logo">
+      
+  <img src="../../images/peach.svg" alt="logo">
+
+    </a>
+    bareUtils
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/bareASGI/bareUtils" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bareASGI/bareUtils
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started.
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/headers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading and writing headers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/response-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Response Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/cookies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Managing cookies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/streaming-content/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/compression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/unpacking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unpacking body content
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bareutils.cookies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bareutils.cookies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bareutils.header/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bareutils.header
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bareutils.response_code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bareutils.response_code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bareutils.streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bareutils.streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bareutils.unpacking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bareutils.unpacking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bareutils.compression
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bareutils.compression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#module-bareutilscompression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module bareutils.compression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="module bareutils.compression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-function-bareutilscompressioncompression_reader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        async function bareutils.compression.compression_reader
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="async function bareutils.compression.compression_reader">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-generator-function-bareutilscompressioncompression_reader_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        async generator function bareutils.compression.compression_reader_adapter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="async generator function bareutils.compression.compression_reader_adapter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Yields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressioncompression_writer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.compression_writer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.compression_writer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-generator-function-bareutilscompressioncompression_writer_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        async generator function bareutils.compression.compression_writer_adapter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="async generator function bareutils.compression.compression_writer_adapter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Yields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_compress_compressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_compress_compressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_compress_compressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_compress_decompressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_compress_decompressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_compress_decompressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_deflate_compressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_deflate_compressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_deflate_compressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_deflate_decompressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_deflate_decompressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_deflate_decompressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_gzip_compressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_gzip_compressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_gzip_compressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_gzip_decompressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_gzip_decompressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_gzip_decompressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-compressor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        class Compressor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="class Compressor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-compressorcompress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Compressor.compress
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Compressor.compress">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-compressorflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Compressor.flush
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Compressor.flush">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-decompressor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        class Decompressor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="class Decompressor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#property-decompressoreof" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        property Decompressor.eof
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="property Decompressor.eof">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#property-decompressorunconsumed_tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        property Decompressor.unconsumed_tail
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="property Decompressor.unconsumed_tail">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#property-decompressorunused_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        property Decompressor.unused_data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="property Decompressor.unused_data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-decompressorcopy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Decompressor.copy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Decompressor.copy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-decompressordecompress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Decompressor.decompress
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Decompressor.decompress">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-decompressorflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Decompressor.flush
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Decompressor.flush">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#module-bareutilscompression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        module bareutils.compression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="module bareutils.compression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-function-bareutilscompressioncompression_reader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        async function bareutils.compression.compression_reader
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="async function bareutils.compression.compression_reader">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-generator-function-bareutilscompressioncompression_reader_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        async generator function bareutils.compression.compression_reader_adapter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="async generator function bareutils.compression.compression_reader_adapter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Yields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressioncompression_writer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.compression_writer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.compression_writer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-generator-function-bareutilscompressioncompression_writer_adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        async generator function bareutils.compression.compression_writer_adapter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="async generator function bareutils.compression.compression_writer_adapter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Yields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_compress_compressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_compress_compressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_compress_compressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_compress_decompressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_compress_decompressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_compress_decompressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_deflate_compressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_deflate_compressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_deflate_compressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_deflate_decompressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_deflate_decompressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_deflate_decompressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_gzip_compressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_gzip_compressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_gzip_compressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-bareutilscompressionmake_gzip_decompressobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        function bareutils.compression.make_gzip_decompressobj
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="function bareutils.compression.make_gzip_decompressobj">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-compressor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        class Compressor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="class Compressor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-compressorcompress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Compressor.compress
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Compressor.compress">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-compressorflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Compressor.flush
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Compressor.flush">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-decompressor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        class Decompressor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="class Decompressor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#property-decompressoreof" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        property Decompressor.eof
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="property Decompressor.eof">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#property-decompressorunconsumed_tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        property Decompressor.unconsumed_tail
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="property Decompressor.unconsumed_tail">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#property-decompressorunused_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        property Decompressor.unused_data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="property Decompressor.unused_data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-decompressorcopy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Decompressor.copy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Decompressor.copy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-decompressordecompress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Decompressor.decompress
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Decompressor.decompress">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#method-decompressorflush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        method Decompressor.flush
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="method Decompressor.flush">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returns_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>bareutils.compression</h1>
+
+<div class="autodoc-module">
+<h3 class="autodoc-title" id="module-bareutilscompression">
+      <span class="autodoc-title-type">module </span><span class="autodoc-title-name">bareutils.compression</span>
+  <a class="headerlink" href="#module-bareutilscompression" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Compression utilities</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Only compression direclty supported by standard library functions are provided
+here to avoid the need for additional dependencies. Other compression methods
+should be implemented in a separate module.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-examples">
+
+</div>
+<div class="autodoc-attributes">
+
+</div>
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="async-function-bareutilscompressioncompression_reader">
+  <span class="autodoc-title-type">async function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">compression_reader</span>
+<a class="headerlink" href="#async-function-bareutilscompressioncompression_reader" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_1">Summary<a class="headerlink" href="#summary_1" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Reads a compressed stream and returns the decompressed bytes.</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-keyword">async</span><span> </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">compression_reader</var><span class="autodoc-punctuation">(</span><div class="autodoc-arglist">
+<div class="autodoc-argument">
+          <var class="autodoc-varname">source</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">AsyncIterable[bytes]</span><span class="autodoc-punctuation">,</span></div>
+<div class="autodoc-argument">
+          <var class="autodoc-varname">decompressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Decompressor</span></div>
+</div>
+<span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bytes</span></div>
+<br />
+<div class="autodoc-parameters">
+<h4 class="autodoc-title" id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h4>
+<var class="autodoc-varname">source</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">AsyncIterable[bytes]</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The input stream.</p>
+</div>
+</div>
+<var class="autodoc-varname">decompressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Decompressor</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The decompressor.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns">Returns<a class="headerlink" href="#returns" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">bytes</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">The decompressed bytes.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="async-generator-function-bareutilscompressioncompression_reader_adapter">
+  <span class="autodoc-title-type">async generator function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">compression_reader_adapter</span>
+<a class="headerlink" href="#async-generator-function-bareutilscompressioncompression_reader_adapter" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_2">Summary<a class="headerlink" href="#summary_2" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Adapters a reader to decompress the data.</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-keyword">async</span><span> </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">compression_reader_adapter</var><span class="autodoc-punctuation">(</span><div class="autodoc-arglist">
+<div class="autodoc-argument">
+          <var class="autodoc-varname">reader</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">AsyncIterable[bytes]</span><span class="autodoc-punctuation">,</span></div>
+<div class="autodoc-argument">
+          <var class="autodoc-varname">decompressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Decompressor</span></div>
+</div>
+<span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">AsyncIterable[bytes]</span></div>
+<br />
+<div class="autodoc-parameters">
+<h4 class="autodoc-title" id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h4>
+<var class="autodoc-varname">reader</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">AsyncIterable[bytes]</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The reader.</p>
+</div>
+</div>
+<var class="autodoc-varname">decompressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Decompressor</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The decompressor.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="yields">Yields<a class="headerlink" href="#yields" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">AsyncIterable[bytes]</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">An async iterable of decompressed bytes.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="function-bareutilscompressioncompression_writer">
+  <span class="autodoc-title-type">function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">compression_writer</span>
+<a class="headerlink" href="#function-bareutilscompressioncompression_writer" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_3">Summary<a class="headerlink" href="#summary_3" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Create an async iterator for compressed content.</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">compression_writer</var><span class="autodoc-punctuation">(</span><div class="autodoc-arglist">
+<div class="autodoc-argument">
+          <var class="autodoc-varname">buf</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">bytes</span><span class="autodoc-punctuation">,</span></div>
+<div class="autodoc-argument">
+          <var class="autodoc-varname">compressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Compressor</span><span class="autodoc-punctuation">,</span></div>
+<div class="autodoc-argument">
+          <var class="autodoc-varname">chunk_size</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">int</span></div>
+</div>
+<span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">AsyncIterable[bytes]</span></div>
+<br />
+<div class="autodoc-parameters">
+<h4 class="autodoc-title" id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h4>
+<var class="autodoc-varname">buf</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">bytes</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The bytes to compress.</p>
+</div>
+</div>
+<var class="autodoc-varname">compressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Compressor</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The compressor.</p>
+</div>
+</div>
+<var class="autodoc-varname">chunk_size</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">int</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>An optional chunk size where -1 indicates no
+chunking. Defaults to -1.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_1">Returns<a class="headerlink" href="#returns_1" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">AsyncIterable[bytes]</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">An async iterator of compressed bytes.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="async-generator-function-bareutilscompressioncompression_writer_adapter">
+  <span class="autodoc-title-type">async generator function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">compression_writer_adapter</span>
+<a class="headerlink" href="#async-generator-function-bareutilscompressioncompression_writer_adapter" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_4">Summary<a class="headerlink" href="#summary_4" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Adapts a bytes generator to generated compressed output.</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-keyword">async</span><span> </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">compression_writer_adapter</var><span class="autodoc-punctuation">(</span><div class="autodoc-arglist">
+<div class="autodoc-argument">
+          <var class="autodoc-varname">writer</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">AsyncIterable[bytes]</span><span class="autodoc-punctuation">,</span></div>
+<div class="autodoc-argument">
+          <var class="autodoc-varname">compressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Compressor</span></div>
+</div>
+<span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">AsyncIterable[bytes]</span></div>
+<br />
+<div class="autodoc-parameters">
+<h4 class="autodoc-title" id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h4>
+<var class="autodoc-varname">writer</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">AsyncIterable[bytes]</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The writer to be adapted.</p>
+</div>
+</div>
+<var class="autodoc-varname">compressobj</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">Compressor</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>A compressor</p>
+</div>
+</div>
+</div>
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="yields_1">Yields<a class="headerlink" href="#yields_1" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">AsyncIterable[bytes]</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">The compressed content as bytes</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="function-bareutilscompressionmake_compress_compressobj">
+  <span class="autodoc-title-type">function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">make_compress_compressobj</span>
+<a class="headerlink" href="#function-bareutilscompressionmake_compress_compressobj" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_5">Summary<a class="headerlink" href="#summary_5" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Make a compressor for 'compress'</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Note: This is not used by browsers anymore and should be avoided.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">make_compress_compressobj</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">Compressor</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_2">Returns<a class="headerlink" href="#returns_2" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">Compressor</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">A compress compressor.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="function-bareutilscompressionmake_compress_decompressobj">
+  <span class="autodoc-title-type">function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">make_compress_decompressobj</span>
+<a class="headerlink" href="#function-bareutilscompressionmake_compress_decompressobj" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_6">Summary<a class="headerlink" href="#summary_6" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Make a compressor for 'compress'</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_2">Description<a class="headerlink" href="#description_2" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Note: This is not used by browsers anymore and should be avoided.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">make_compress_decompressobj</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">Decompressor</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_3">Returns<a class="headerlink" href="#returns_3" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">Decompressor</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">A compress compressor.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="function-bareutilscompressionmake_deflate_compressobj">
+  <span class="autodoc-title-type">function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">make_deflate_compressobj</span>
+<a class="headerlink" href="#function-bareutilscompressionmake_deflate_compressobj" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_7">Summary<a class="headerlink" href="#summary_7" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Make a compressor for 'deflate'</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">make_deflate_compressobj</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">Compressor</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_4">Returns<a class="headerlink" href="#returns_4" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">Compressor</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">A deflate compressor.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="function-bareutilscompressionmake_deflate_decompressobj">
+  <span class="autodoc-title-type">function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">make_deflate_decompressobj</span>
+<a class="headerlink" href="#function-bareutilscompressionmake_deflate_decompressobj" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_8">Summary<a class="headerlink" href="#summary_8" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Make a compressor for 'deflate'</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">make_deflate_decompressobj</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">Decompressor</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_5">Returns<a class="headerlink" href="#returns_5" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">Decompressor</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">A deflate compressor.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="function-bareutilscompressionmake_gzip_compressobj">
+  <span class="autodoc-title-type">function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">make_gzip_compressobj</span>
+<a class="headerlink" href="#function-bareutilscompressionmake_gzip_compressobj" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_9">Summary<a class="headerlink" href="#summary_9" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Make a compressor for 'gzip'</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">make_gzip_compressobj</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">Compressor</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_6">Returns<a class="headerlink" href="#returns_6" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">Compressor</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">A gzip compressor.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="function-bareutilscompressionmake_gzip_decompressobj">
+  <span class="autodoc-title-type">function </span><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">make_gzip_decompressobj</span>
+<a class="headerlink" href="#function-bareutilscompressionmake_gzip_decompressobj" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_10">Summary<a class="headerlink" href="#summary_10" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Make a compressor for 'gzip'</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">make_gzip_decompressobj</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">Decompressor</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_7">Returns<a class="headerlink" href="#returns_7" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">Decompressor</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">A gzip compressor.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-class">
+<h3 class="autodoc-title" id="class-compressor">
+  <span class="autodoc-title-type">class </span><span class="autodoc-title-name">Compressor</span>
+<a class="headerlink" href="#class-compressor" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_11">Summary<a class="headerlink" href="#summary_11" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>A class to represent the methods available on a compressor</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">Compressor</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">None</span></div>
+<br />
+<div class="autodoc-attributes">
+
+</div>
+<div class="autodoc-properties">
+
+</div>
+<div class="autodoc-classmethods"></div>
+<div class="autodoc-methods">
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="method-compressorcompress">
+  <span class="autodoc-title-type">method </span><span class="autodoc-qualifier">Compressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">compress</span>
+<a class="headerlink" href="#method-compressorcompress" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_12">Summary<a class="headerlink" href="#summary_12" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Compress a buffer</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">Compressor</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">compress</var><span class="autodoc-punctuation">(</span><div class="autodoc-arglist">
+<div class="autodoc-argument">
+          <var class="autodoc-varname">buf</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">bytes</span></div>
+</div>
+<span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bytes</span></div>
+<br />
+<div class="autodoc-parameters">
+<h4 class="autodoc-title" id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h4>
+<var class="autodoc-varname">buf</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">bytes</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The buffer to compress.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_8">Returns<a class="headerlink" href="#returns_8" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">bytes</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">The compressed buffer.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="method-compressorflush">
+  <span class="autodoc-title-type">method </span><span class="autodoc-qualifier">Compressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">flush</span>
+<a class="headerlink" href="#method-compressorflush" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_13">Summary<a class="headerlink" href="#summary_13" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Flush the compressor</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">Compressor</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">flush</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bytes</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_9">Returns<a class="headerlink" href="#returns_9" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">bytes</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">The remaining bytes.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+<div class="autodoc-class">
+<h3 class="autodoc-title" id="class-decompressor">
+  <span class="autodoc-title-type">class </span><span class="autodoc-title-name">Decompressor</span>
+<a class="headerlink" href="#class-decompressor" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_14">Summary<a class="headerlink" href="#summary_14" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>A class to represent the methods available on a compressor</p>
+</div>
+</div>
+<div class="autodoc-description">
+
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">bareutils.compression</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">Decompressor</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">None</span></div>
+<br />
+<div class="autodoc-attributes">
+
+</div>
+<div class="autodoc-properties">
+<div class="autodoc-property">
+<h3 class="autodoc-title" id="property-decompressoreof">
+  <span class="autodoc-title-type">property </span><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">eof</span>
+<a class="headerlink" href="#property-decompressoreof" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_15">Summary<a class="headerlink" href="#summary_15" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>A boolean indicating whether the end of the compressed data stream has been reached.</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_3">Description<a class="headerlink" href="#description_3" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>This makes it possible to distinguish between a properly formed compressed
+stream, and an incomplete or truncated one.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-property">
+      <var class="autodoc-varname">eof</var><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bool</span>
+    </div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<div class="autodoc-property">
+<h3 class="autodoc-title" id="property-decompressorunconsumed_tail">
+  <span class="autodoc-title-type">property </span><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">unconsumed_tail</span>
+<a class="headerlink" href="#property-decompressorunconsumed_tail" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_16">Summary<a class="headerlink" href="#summary_16" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>A bytes object that contains any data that was not consumed by the</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_4">Description<a class="headerlink" href="#description_4" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>last decompress() call because it exceeded the limit for the
+uncompressed data buffer.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-property">
+      <var class="autodoc-varname">unconsumed_tail</var><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bytes</span>
+    </div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<div class="autodoc-property">
+<h3 class="autodoc-title" id="property-decompressorunused_data">
+  <span class="autodoc-title-type">property </span><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">unused_data</span>
+<a class="headerlink" href="#property-decompressorunused_data" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_17">Summary<a class="headerlink" href="#summary_17" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>A bytes object which contains any bytes past the end of the</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_5">Description<a class="headerlink" href="#description_5" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>compressed data.</p>
+<p>That is, this remains b"" until the last byte that contains compression
+data is available. If the whole bytestring turned out to contain
+compressed data, this is b"", an empty bytes object.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-property">
+      <var class="autodoc-varname">unused_data</var><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bytes</span>
+    </div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+</div>
+<div class="autodoc-classmethods"></div>
+<div class="autodoc-methods">
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="method-decompressorcopy">
+  <span class="autodoc-title-type">method </span><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">copy</span>
+<a class="headerlink" href="#method-decompressorcopy" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_18">Summary<a class="headerlink" href="#summary_18" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Returns a copy of the decompression object.</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_6">Description<a class="headerlink" href="#description_6" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>This can be used to save the state of the decompressor midway through
+the data stream in order to speed up random seeks into the stream at a
+future point.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">copy</var><span class="autodoc-punctuation">(</span><span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">Decompressor</span></div>
+<br />
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_10">Returns<a class="headerlink" href="#returns_10" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">Decompressor</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">A copy of the decompressor.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="method-decompressordecompress">
+  <span class="autodoc-title-type">method </span><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">decompress</span>
+<a class="headerlink" href="#method-decompressordecompress" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_19">Summary<a class="headerlink" href="#summary_19" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>Decompress data, returning a bytes object containing the uncompressed</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_7">Description<a class="headerlink" href="#description_7" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>data corresponding to at least part of the data in string.</p>
+<p>This data should be concatenated to the output produced by any preceding
+calls to the decompress() method. Some of the input data may be
+preserved in internal buffers for later processing.</p>
+<p>If the optional parameter max_length is non-zero then the return value
+will be no longer than max_length. This may mean that not all of the
+compressed input can be processed; and unconsumed data will be stored in
+the attribute unconsumed_tail. This bytestring must be passed to a
+subsequent call to decompress() if decompression is to continue. If
+max_length is zero then the whole input is decompressed, and
+unconsumed_tail is empty.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">decompress</var><span class="autodoc-punctuation">(</span><div class="autodoc-arglist">
+<div class="autodoc-argument">
+          <var class="autodoc-varname">buf</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">bytes</span><span class="autodoc-punctuation">,</span></div>
+<div class="autodoc-argument">
+          <var class="autodoc-varname">max_length</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">int</span></div>
+</div>
+<span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bytes</span></div>
+<br />
+<div class="autodoc-parameters">
+<h4 class="autodoc-title" id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h4>
+<var class="autodoc-varname">buf</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">bytes</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The data to decompress.</p>
+</div>
+</div>
+<var class="autodoc-varname">max_length</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">int</span><span class="autodoc-punctuation"> (optional)</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>Max length of output. Defaults to 0.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_11">Returns<a class="headerlink" href="#returns_11" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">bytes</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">The decompressed data.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<div class="autodoc-callable">
+<h3 class="autodoc-title" id="method-decompressorflush">
+  <span class="autodoc-title-type">method </span><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><span class="autodoc-title-name">flush</span>
+<a class="headerlink" href="#method-decompressorflush" title="Permanent link">&para;</a></h3>
+<h4 class="autodoc-title" id="summary_20">Summary<a class="headerlink" href="#summary_20" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>All pending input is processed, and a bytes object containing the</p>
+</div>
+</div>
+<div class="autodoc-description">
+<h4 class="autodoc-title" id="description_8">Description<a class="headerlink" href="#description_8" title="Permanent link">&para;</a></h4>
+<div class="autodoc-description">
+<div>
+<p>remaining uncompressed output is returned. After calling flush(), the
+decompress() method cannot be called again; the only realistic action is
+to delete the object.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-signature"><span class="autodoc-qualifier">Decompressor</span><span class="autodoc-punctuation">.</span><var class="autodoc-varname">flush</var><span class="autodoc-punctuation">(</span><div class="autodoc-arglist">
+<div class="autodoc-argument">
+          <var class="autodoc-varname">length</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">int | None</span></div>
+</div>
+<span class="autodoc-punctuation">)</span><span class="autodoc-punctuation"> -&gt; </span><span class="autodoc-vartype">bytes</span></div>
+<br />
+<div class="autodoc-parameters">
+<h4 class="autodoc-title" id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h4>
+<var class="autodoc-varname">length</var><span class="autodoc-punctuation">: </span><span class="autodoc-vartype">int | None</span>
+      <div class="autodoc-vardesc">
+<div>
+<p>The initial size of the output
+buffer. Defaults to None.</p>
+</div>
+</div>
+</div>
+<div class="autodoc-returns">
+<h4 class="autodoc-title" id="returns_12">Returns<a class="headerlink" href="#returns_12" title="Permanent link">&para;</a></h4>
+<span class="autodoc-vartype">bytes</span><span class="autodoc-punctuation">: </span>
+<span class="autodoc-summary">The remaining uncompressed output.</span>
+</div>
+<div class="autodoc-raises">
+
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+</div>
+<div class="autodoc-examples">
+
+</div>
+</div>
+<hr />
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "stable", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
