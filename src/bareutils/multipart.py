@@ -1,4 +1,4 @@
-from typing import Mapping, TypedDict, cast
+from typing import TypedDict
 
 from . import header
 
@@ -49,15 +49,12 @@ def parse_form_data(
             raise ValueError(
                 "Malformed part: missing header/content separator.")
 
-        headers = header.collect([
+        headers = [
             _to_header(line)
             for line in header_data.split(b"\r\n")
-        ])
+        ]
 
-        content_disposition = cast(
-            tuple[bytes, Mapping[bytes, bytes] | None] | None,
-            headers.get(b"content-disposition")
-        )
+        content_disposition = header.content_disposition(headers)
         if not content_disposition:
             raise ValueError("Missing Content-Disposition header.")
 
@@ -68,10 +65,7 @@ def parse_form_data(
         name = params[b"name"].decode()
         filename = params.get(b"filename")
 
-        content_type = cast(
-            tuple[bytes, Mapping[bytes, bytes] | None] | None,
-            headers.get(b"content-type")
-        )
+        content_type = header.content_type(headers)
         if content_type is not None:
             media_type, content_params = content_type
         else:
