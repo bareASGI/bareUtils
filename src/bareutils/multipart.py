@@ -36,6 +36,7 @@ def parse_form_data(
     # Trim off the start boundary and the sentinal
     data = data[len(delimiter):-len(sentinal)]
 
+    default_charset = 'utf-8'
     fields: dict[str, list[str]] = {}
     files: dict[str, list[MultipartFile]] = {}
 
@@ -56,7 +57,7 @@ def parse_form_data(
             raise ValueError("Missing Content-Disposition header.")
 
         disposition, params = content_disposition
-        if disposition != b"form-data" or not params or b"name" not in params:
+        if disposition != b"form-data" or not params or b'name' not in params:
             raise ValueError("Invalid Content-Disposition header.")
 
         name = params[b"name"].decode()
@@ -68,16 +69,20 @@ def parse_form_data(
         else:
             media_type, content_params = b"text/plain", None
 
-        if content_params is None or b"charset" not in content_params:
-            charset = "utf-8"
-        else:
-            charset = content_params[b"charset"].decode('ascii')
-
         content = content.rstrip(b"\r\n")
 
         if filename is None:
-            value = content.decode(charset)
-            fields.setdefault(name, []).append(value)
+
+            if name == "_charset_":
+                default_charset = content.decode('ascii')
+            else:
+                if content_params is None or b"charset" not in content_params:
+                    charset = default_charset
+                else:
+                    charset = content_params[b"charset"].decode('ascii')
+
+                value = content.decode(charset)
+                fields.setdefault(name, []).append(value)
         else:
             file: MultipartFile = {
                 "filename": filename.decode(),
