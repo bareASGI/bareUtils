@@ -1,12 +1,5 @@
 """Exports from bareUtils"""
 
-from .streaming import (
-    text_reader,
-    text_writer,
-    bytes_reader,
-    bytes_writer
-)
-
 from .compression import (
     Compressor,
     CompressorFactory,
@@ -31,14 +24,23 @@ from .cookies import (
     decode_cookies
 )
 
-__version__ = "5.0.0.alpha.1"
+from .multipart import (
+    MultipartFile,
+    MultipartFormData,
+    parse_form_data,
+)
+
+from .streaming import (
+    text_reader,
+    text_writer,
+    bytes_reader,
+    bytes_writer
+)
+
 
 __all__ = [
-    "text_writer",
-    "text_reader",
-    "bytes_writer",
-    "bytes_reader",
 
+    # .compression
     'Compressor',
     'CompressorFactory',
     'Decompressor',
@@ -54,8 +56,21 @@ __all__ = [
     'compression_reader_adapter',
     'compression_reader',
 
+    # .cookies
     "encode_set_cookie",
     "decode_set_cookie",
     "encode_cookies",
-    "decode_cookies"
+    "decode_cookies",
+
+    # .multipart
+    "MultipartFile",
+    "MultipartFormData",
+    "parse_form_data",
+
+    # .streaming
+    "text_writer",
+    "text_reader",
+    "bytes_writer",
+    "bytes_reader",
+
 ]
