@@ -29,15 +29,12 @@ def parse_form_data(
     if not data.startswith(delimiter):
         raise ValueError("Data does not start with the expected boundary.")
 
-    # Trim off the start boundary.
-    data = data[len(delimiter):]
-
     sentinal = b"\r\n--" + boundary + b"--\r\n"
     if not data.endswith(sentinal):
         raise ValueError("Data does not end with the expected boundary.")
 
-    # Trim off the sentinal
-    data = data[:-len(sentinal)]
+    # Trim off the start boundary and the sentinal
+    data = data[len(delimiter):-len(sentinal)]
 
     fields: dict[str, list[str]] = {}
     files: dict[str, list[MultipartFile]] = {}
