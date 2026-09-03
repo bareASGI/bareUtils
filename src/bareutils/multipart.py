@@ -63,31 +63,34 @@ def parse_form_data(
         filename = params.get(b"filename")
 
         content_type = header.content_type(headers)
-        if content_type is not None:
-            media_type, content_params = content_type
-        else:
-            media_type, content_params = b"text/plain", None
+        media_type, content_params = (
+            content_type
+            if content_type is not None else
+            (b"text/plain", None)
+        )
 
         content = content.rstrip(b"\r\n")
 
-        if filename is None:
+        if filename is not None:
 
-            if name == "_charset_":
-                default_charset = content.decode('ascii')
-            else:
-                if content_params is None or b"charset" not in content_params:
-                    charset = default_charset
-                else:
-                    charset = content_params[b"charset"].decode('ascii')
-
-                value = content.decode(charset)
-                fields.setdefault(name, []).append(value)
-        else:
-            file: MultipartFile = {
+            files.setdefault(name, []).append({
                 "filename": filename.decode(),
                 "content_type": media_type.decode(),
                 "content": content
-            }
-            files.setdefault(name, []).append(file)
+            })
+
+        elif name == "_charset_":
+
+            default_charset = content.decode('ascii')
+
+        else:
+
+            charset = (
+                default_charset
+                if content_params is None or b"charset" not in content_params else
+                content_params[b"charset"].decode('ascii')
+            )
+
+            fields.setdefault(name, []).append(content.decode(charset))
 
     return fields, files
