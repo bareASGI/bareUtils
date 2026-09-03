@@ -44,8 +44,7 @@ def parse_form_data(
 
         header_data, sep, content = part.partition(b"\r\n\r\n")
         if not sep:
-            raise ValueError(
-                "Malformed part: missing header/content separator.")
+            raise ValueError("Missing header/content separator.")
 
         headers = [
             _to_header(line)
