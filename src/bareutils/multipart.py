@@ -25,6 +25,19 @@ def parse_form_data(
         data: bytes,
         boundary: bytes
 ) -> tuple[dict[str, list[str]], dict[str, list[MultipartFile]]]:
+    """Parse multipart form data.
+
+    Args:
+        data (bytes): The raw form data.
+        boundary (bytes): The boundary string.
+
+    Raises:
+        ValueError: If the data is malformed or does not match the boundary.
+
+    Returns:
+        tuple[dict[str, list[str]], dict[str, list[MultipartFile]]]: A tuple containing the parsed fields and files.
+    """
+
     delimiter = b"--" + boundary + b"\r\n"
     if not data.startswith(delimiter):
         raise ValueError("Data does not start with the expected boundary.")
