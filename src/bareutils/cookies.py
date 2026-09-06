@@ -28,17 +28,17 @@ def encode_set_cookie(
     Args:
         name (bytes): The cookie name
         value (bytes): The cookie value
-        expires (Optional[datetime], optional): The time the cookie expires.
+        expires (datetime | None, optional): The time the cookie expires.
             Defaults to None.
-        max_age (Optional[Union[int, timedelta]], optional): The maximum age of
+        max_age (int | timedelta | None, optional): The maximum age of
             the cookie in seconds. Defaults to None.
-        path (Optional[bytes], optional): The cookie path. Defaults to None.
-        domain (Optional[bytes], optional): The cookie domain. Defaults to None.
+        path (bytes | None, optional): The cookie path. Defaults to None.
+        domain (bytes | None, optional): The cookie domain. Defaults to None.
         secure (bool, optional): Indicates if the cookie is restricted to https.
             Defaults to False.
         http_only (bool, optional): Indicates if the cookie is available to the
             API. Defaults to False.
-        same_site (Optional[bytes], optional): CORS directive. Defaults to None.
+        same_site (bytes | None, optional): CORS directive. Defaults to None.
 
     Raises:
         ValueError: Raised if the __Secure- or __Host- was used without secure
@@ -163,15 +163,15 @@ def make_cookie(
     Args:
         key (bytes): The cookie name
         value (bytes): The cookie value
-        expires (Optional[Union[datetime, timedelta]], optional): The expiry
+        expires (datetime | timedelta | None, optional): The expiry
             time of the cookie. Defaults to None.
-        path (Optional[bytes], optional): The cookie path. Defaults to None.
-        domain (Optional[bytes], optional): The cookie domain. Defaults to None.
+        path (bytes | None, optional): The cookie path. Defaults to None.
+        domain (bytes | None, optional): The cookie domain. Defaults to None.
         secure (bool, optional): Indicates if the cookie is restricted to https.
             Defaults to False.
         http_only (bool, optional): Indicates if the cookie is available to the
             API. Defaults to False.
-        same_site (Optional[bytes], optional): CORS directive. Defaults to None.
+        same_site (bytes | None, optional): CORS directive. Defaults to None.
 
     Returns:
         bytes: The set-cookie header

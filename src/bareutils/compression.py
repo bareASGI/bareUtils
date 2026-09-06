@@ -1,6 +1,6 @@
 """Compression utilities
 
-Only compression direclty supported by standard library functions are provided
+Only compression directly supported by standard library functions are provided
 here to avoid the need for additional dependencies. Other compression methods
 should be implemented in a separate module.
 """
@@ -36,7 +36,7 @@ class Compressor(metaclass=ABCMeta):
         """
 
 
-CompressorFactory = Callable[[], Compressor]
+type CompressorFactory = Callable[[], Compressor]
 
 
 def make_gzip_compressobj() -> Compressor:
@@ -198,7 +198,7 @@ class Decompressor(metaclass=ABCMeta):
         """
 
 
-DecompressorFactory = Callable[[], Decompressor]
+type DecompressorFactory = Callable[[], Decompressor]
 
 
 def make_gzip_decompressobj() -> Decompressor:
